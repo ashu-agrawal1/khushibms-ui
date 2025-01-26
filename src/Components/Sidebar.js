@@ -1,25 +1,37 @@
 // src/components/Sidebar.jsx
 import { NavLink } from "react-router-dom";
 
-const Sidebar = () => {
+const Sidebar = ({ isOpen, toggleSidebar }) => {
   const menuItems = [
-    { name: "Dashboard", path: "/dashboard" },
-    { name: "Products", path: "/products" },
+    { name: "Tax Master", path: "/master/tax" },
+    { name: "Products", path: "/products/addproduct" },
+    { name: "Sales", path: "/sales/sales" },
     { name: "Inventory", path: "/inventory" },
-    { name: "Purchase", path: "/purchase" },
-    { name: "Sales", path: "/sales" },
-    { name: "Billing", path: "/billing" },
-    { name: "Tax", path: "/tax" },
+    { name: "Purchase", path: "/purchase/purchase" },
   ];
 
   return (
-    <div className="w-64 h-screen bg-gray-800 text-white flex flex-col">
+    <div
+      className={`fixed top-0 left-0 h-full bg-gray-800 text-white z-40 transform ${
+        isOpen ? "translate-x-0" : "-translate-x-full"
+      } transition-transform duration-300`}
+      style={{ width: "250px" }}
+    >
+      {/* Close Button */}
+      <button
+        className="absolute top-4 right-4 text-white text-2xl focus:outline-none"
+        onClick={toggleSidebar}
+      >
+        ✖
+      </button>
+      {/* <div className="w-64 h-screen bg-gray-800 text-white flex flex-col"> */}
       <div className="text-center py-4 text-2xl font-bold border-b border-gray-700">
-        Business Management
+        Business MS
       </div>
       <nav className="flex flex-col gap-2 p-4">
         {menuItems.map((item) => (
           <NavLink
+          onClick={toggleSidebar}
             key={item.name}
             to={item.path}
             className={({ isActive }) =>
