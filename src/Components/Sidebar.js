@@ -24,14 +24,13 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
       >
         ✖
       </button>
-      {/* <div className="w-64 h-screen bg-gray-800 text-white flex flex-col"> */}
       <div className="text-center py-4 text-2xl font-bold border-b border-gray-700">
         Business MS
       </div>
       <nav className="flex flex-col gap-2 p-4">
         {menuItems.map((item) => (
           <NavLink
-          onClick={toggleSidebar}
+            onClick={toggleSidebar}
             key={item.name}
             to={item.path}
             className={({ isActive }) =>

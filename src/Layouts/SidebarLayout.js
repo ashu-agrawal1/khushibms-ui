@@ -15,7 +15,9 @@ const SidebarLayout = ({ children }) => {
       <Sidebar isOpen={isSidebarOpen} toggleSidebar={toggleSidebar} />
       <div className="flex-1 flex flex-col">
         <Navbar toggleSidebar={toggleSidebar} />
-        {children}
+        <div className="flex-1 h-full p-4 overflow-auto bg-gradient-to-b from-[#29004E] to-[#5F00B4]">
+          {children}
+        </div>
       </div>
     </div>
   );

@@ -7,7 +7,7 @@ const Navbar = ({ toggleSidebar }) => {
   // Map of route paths to page headings\
   const pageHeadings = {
     "/master/tax": "Tax Master",
-    "/products/addproduct": "Add Product",
+    "/products/addproduct": "Add New Product",
     "/sales/sales": "Sales",
     "/inventory": "Inventory",
     "/purchase/purchase": "Purchase",

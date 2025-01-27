@@ -17,7 +17,7 @@ export default function Login() {
         data: { username, password },
       });
       toast.success("Logged In");
-      navigate('inventory')
+      navigate("inventory");
     } catch (err) {
       console.log(err);
       toast.error(err?.response?.data || "");
@@ -38,39 +38,47 @@ export default function Login() {
   };
 
   return (
-    <div className="flex items-center justify-center h-screen bg-gray-100">
-      <div className="bg-white p-8 rounded shadow-md w-96">
-        <h2 className="text-2xl font-bold text-center mb-6">Login</h2>
-        <form onSubmit={handleLogin} className="flex flex-col gap-4">
+    <div className="flex items-center justify-center h-screen">
+        <div className="p-8 rounded-3xl shadow-md w-96 bg-[#B6D5FFB2]">
+        <h2 className="text-5xl font-semibold text-center mb-6 text-[#FFFFFF]">
+          Login
+        </h2>
+        <form onSubmit={handleLogin} className="flex flex-col">
+          <label className="block text-sm/6 font-medium text-[#FFFFFF] mb-1">
+            Username
+          </label>
           <input
             // type="email"
-            placeholder="Email"
+            placeholder="Username"
             value={username}
             onChange={(e) => setUsername(e.target.value)}
-            className="px-4 py-2 border rounded focus:outline-none focus:ring focus:ring-blue-500"
+            className="px-4 py-2 mb-2 border rounded-xl focus:outline-none focus:ring focus:ring-blue-500"
           />
+          <label className="block text-sm/6 font-medium text-[#FFFFFF] mb-1">
+            Password
+          </label>
           <input
             type="password"
             placeholder="Password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            className="px-4 py-2 border rounded focus:outline-none focus:ring focus:ring-blue-500"
+            className="px-4 py-2 mb-4 border rounded-xl focus:outline-none focus:ring focus:ring-blue-500"
           />
           <button
             type="submit"
-            className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+            className="text-white px-4 py-2 rounded-xl hover:bg-blue-600 bg-gradient-to-r from-[#0A7CE7EC] to-[#014BC8]"
           >
             Login
           </button>
         </form>
       </div>
-      <button
+      {/* <button
         type="button"
         className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
         onClick={handleLogout}
       >
         LogOut
-      </button>
+      </button> */}
     </div>
   );
 }
