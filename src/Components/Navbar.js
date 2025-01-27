@@ -17,7 +17,7 @@ const Navbar = ({ toggleSidebar }) => {
   const heading = pageHeadings[location.pathname] || "Welcome";
 
   return (
-    <div className="flex items-center justify-between p-4 bg-gray-800 text-white text-center">
+    <div className="flex items-center justify-between p-4 bg-[#29004E] text-white text-center">
       {/* Hamburger Icon */}
       <button
         className="text-white text-2xl focus:outline-none"
@@ -27,16 +27,16 @@ const Navbar = ({ toggleSidebar }) => {
       </button>
 
       {/* Page Heading */}
-      <h1 className="text-lg font-bold text-center">{heading}</h1>
+      <h1 className="text-3xl font-bold text-center">{heading}</h1>
 
       {/* Company Name/Logo */}
       <div className="text-right">
         <span className="text-sm font-semibold">Your Company Name</span>
         {/* Optionally, add a logo */}
         <img
-          src="/logo.png"
+          src="/logo.svg"
           alt="Company Logo"
-          className="w-8 h-8 inline-block ml-2"
+          className="w-12 h-12 inline-block ml-2"
         />
       </div>
     </div>

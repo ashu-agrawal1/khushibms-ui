@@ -1,36 +1,78 @@
 import React, { useEffect, useState } from "react";
-import Table from "../../Components/Table";
 import axios from "axios";
-import { objectToArray } from "../../helper/ResponseHandler";
 import { toast } from "react-toastify";
 import UseFormData from "../../Custom Hooks/UseFormData";
 import InputBox from "../../Components/InputBox";
+import Table2 from "../../Components/Table2";
 
 const baseurl = process.env.REACT_APP_BASE_URL;
-const inventoryResponseKeys = ["name", "percentage"];
-const headings = ["Product Name", "Tax %"];
+const inventoryResponseKeys = [
+  "name",
+  "brandName",
+  "weight",
+  "mrp",
+  "sellingPrice",
+  "hsn",
+  "quantity",
+];
+const headings = [
+  "Product Name",
+  "Brand Name",
+  "Weight",
+  "MRP",
+  "rate",
+  "HSN",
+  "Quantity",
+];
 const initialData = {
-  name: "",
-  brandName: "",
-  taxId: "",
-  category: "",
-  supplier: "",
-  hsn: "",
-  uniqueId: "",
-  mrp: "",
-  sellingPrice: "",
-  stock: "",
-  weight: "",
+  partyName: "",
+  partyGST: "",
+  date: "",
+  invoiceNo: "",
 };
+
 export default function Sales() {
   const [products, setProducts] = useState([]);
   const [selectedProducts, setSelectedProducts] = useState([]);
   const [currProduct, setCurrProduct] = useState("");
+  const [quantity, setQuantity] = useState("1");
   const [formData, handleChange] = UseFormData(initialData);
 
   const addProductHandler = () => {
+    if (!currProduct) {
+      toast.error("Please select Product");
+      return;
+    }
+    if (quantity < 1) {
+      toast.error("Please Enter valid quantity");
+      return;
+    }
+    const existingProductIndex = selectedProducts?.findIndex(
+      (item) => item._id === currProduct
+    );
+    if (existingProductIndex !== -1) {
+      toast.error(
+        "Product is already added. Please update the quantity instead."
+      );
+      return;
+    }
     const newProduct = products?.find((ele) => ele._id === currProduct);
-    setSelectedProducts(objectToArray(inventoryResponseKeys, [newProduct]));
+    setSelectedProducts((prev) => [...prev, { ...newProduct, quantity }]);
+    setQuantity("1");
+    setCurrProduct("");
+  };
+  const updateProductQuantity = (id, newQuantity) => {
+    if (newQuantity < 1) {
+      // toast.error("Please Enter valid quantity");
+      return;
+    }
+    const newProducts = selectedProducts?.map((item) => {
+      if (item._id === id) {
+        return { ...item, quantity: newQuantity };
+      }
+      return item;
+    });
+    setSelectedProducts(newProducts);
   };
   const getStock = () => {
     axios({
@@ -39,14 +81,42 @@ export default function Sales() {
     })
       .then((res) => {
         setProducts(res.data);
-        // setSelectedProducts([res.data]);
       })
       .catch((err) => {
         console.log(err);
-        toast.error(err?.response?.data || "");
+        toast.error(
+          err?.response?.data?.errors?.[0]?.msg || err?.response?.data || ""
+        );
       });
   };
-
+  const submitHandler = () => {
+    if (selectedProducts?.length < 1) {
+      toast.error("Please add atlease one product");
+      return;
+    }
+    axios({
+      method: "post",
+      url: baseurl + "sales",
+      data: {
+        products: selectedProducts?.map(({ _id, quantity }) => ({
+          productId: _id,
+          quantity,
+        })),
+      },
+    })
+      .then((res) => {
+        toast.success("Sales Added into Stock");
+        setSelectedProducts([]);
+        setCurrProduct("");
+        setQuantity("1");
+      })
+      .catch((err) => {
+        console.log(err);
+        toast.error(
+          err?.response?.data?.errors?.[0]?.msg || err?.response?.data || ""
+        );
+      });
+  };
   useEffect(() => {
     getStock();
   }, []);
@@ -60,14 +130,12 @@ export default function Sales() {
               name="partyName"
               value={formData.partyName}
               onChange={handleChange}
-              colspan="3"
             />
             <InputBox
               label={"Party GST"}
               name="gst"
               value={formData.gst}
               onChange={handleChange}
-              colspan="3"
             />
             <InputBox
               label={"Date"}
@@ -75,15 +143,15 @@ export default function Sales() {
               value={formData.date}
               type="date"
               onChange={handleChange}
-              colspan="3"
             />
             <InputBox
               label={"Invoice No."}
               name="invoiceNo"
               value={formData.invoiceNo}
               onChange={handleChange}
-              colspan="3"
             />
+            <div className="col-span-2"></div>
+            <div className="col-span-2"></div>
             <div className="col-span-2">
               <label className="block text-lg font-medium text-white">
                 Product
@@ -110,8 +178,9 @@ export default function Sales() {
               label={"Quantity"}
               name="quantity"
               type="number"
-              value={formData.quantity}
-              onChange={handleChange}
+              value={quantity}
+              onChange={(e) => setQuantity(e.target.value)}
+              min={1}
             />
             <div className="col-span-2">
               <button
@@ -125,17 +194,29 @@ export default function Sales() {
           </div>
         </div>
       </form>
-      <div className="mt-2">
-        <Table headings={headings} data={selectedProducts} />
-      </div>
-      <div className="mt-6 flex items-center justify-end gap-x-6">
-        <button
-          type="button"
-          className="rounded-xl px-12 py-2 text-lg font-semibold text-white shadow-xs focus-visible:outline-2 focus-visible:outline-offset-2 bg-[#4ADC15B2]"
-        >
-          Create Bill
-        </button>
-      </div>
+      {selectedProducts?.length > 0 && (
+        <>
+          <div className="mt-2">
+            <Table2
+              headings={headings}
+              data={selectedProducts}
+              datakeys={inventoryResponseKeys}
+              onChangeQuantity={(e) => {
+                updateProductQuantity(e.target.id, e.target.value);
+              }}
+            />
+          </div>
+          <div className="mt-6 flex items-center justify-end gap-x-6">
+            <button
+              type="button"
+              className="rounded-xl px-12 py-2 text-lg font-semibold text-white shadow-xs focus-visible:outline-2 focus-visible:outline-offset-2 bg-[#4ADC15B2]"
+              onClick={submitHandler}
+            >
+              Create Bill
+            </button>
+          </div>
+        </>
+      )}
     </div>
   );
 }

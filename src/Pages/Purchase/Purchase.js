@@ -1,21 +1,67 @@
 import React, { useEffect, useState } from "react";
-import Table from "../../Components/Table";
+import Table2 from "../../Components/Table2";
 import axios from "axios";
-import { objectToArray } from "../../helper/ResponseHandler";
 import { toast } from "react-toastify";
 
 const baseurl = process.env.REACT_APP_BASE_URL;
-const inventoryResponseKeys = ["name", "percentage"];
-const headings = ["Product Name", "Tax %"];
+const inventoryResponseKeys = [
+  "name",
+  "brandName",
+  "weight",
+  "mrp",
+  "hsn",
+  "quantity",
+];
+const headings = [
+  "Product Name",
+  "Brand Name",
+  "Weight",
+  "MRP",
+  "HSN",
+  "Quantity",
+];
 
 export default function Purchase() {
   const [products, setProducts] = useState([]);
   const [selectedProducts, setSelectedProducts] = useState([]);
   const [currProduct, setCurrProduct] = useState("");
+  const [quantity, setQuantity] = useState("1");
 
   const addProductHandler = () => {
+    if (!currProduct) {
+      toast.error("Please select Product");
+      return;
+    }
+    if (quantity < 1) {
+      toast.error("Please Enter valid quantity");
+      return;
+    }
+    const existingProductIndex = selectedProducts?.findIndex(
+      (item) => item._id === currProduct
+    );
+    if (existingProductIndex !== -1) {
+      toast.error(
+        "Product is already added. Please update the quantity instead."
+      );
+      return;
+    }
     const newProduct = products?.find((ele) => ele._id === currProduct);
-    setSelectedProducts(objectToArray(inventoryResponseKeys, [newProduct]));
+    setSelectedProducts((prev) => [...prev, { ...newProduct, quantity }]);
+    setQuantity("1");
+    setCurrProduct("");
+  };
+  const updateProductQuantity = (id, newQuantity) => {
+    if (newQuantity < 1) {
+      // toast.error("Please Enter valid quantity");
+      return;
+    }
+    const newProducts = selectedProducts?.map((item) => {
+      if (item._id === id) {
+        return { ...item, quantity: newQuantity };
+      }
+      return item;
+    });
+    setSelectedProducts(newProducts);
   };
   const getStock = () => {
     axios({
@@ -24,11 +70,40 @@ export default function Purchase() {
     })
       .then((res) => {
         setProducts(res.data);
-        // setSelectedProducts([res.data]);
       })
       .catch((err) => {
         console.log(err);
-        toast.error(err?.response?.data || "");
+        toast.error(
+          err?.response?.data?.errors?.[0]?.msg || err?.response?.data || ""
+        );
+      });
+  };
+  const submitHandler = () => {
+    if (selectedProducts?.length < 1) {
+      toast.error("Please add atlease one product");
+      return;
+    }
+    axios({
+      method: "post",
+      url: baseurl + "purchase",
+      data: {
+        products: selectedProducts?.map(({ _id, quantity }) => ({
+          productId: _id,
+          quantity,
+        })),
+      },
+    })
+      .then((res) => {
+        toast.success("Purchase Added into Stock");
+        setSelectedProducts([]);
+        setCurrProduct("");
+        setQuantity("1");
+      })
+      .catch((err) => {
+        console.log(err);
+        toast.error(
+          err?.response?.data?.errors?.[0]?.msg || err?.response?.data || ""
+        );
       });
   };
 
@@ -109,6 +184,9 @@ export default function Purchase() {
               <div className="mt-2">
                 <input
                   type="number"
+                  value={quantity}
+                  onChange={(e) => setQuantity(e.target.value)}
+                  min={1}
                   className="block w-full rounded-md bg-[#B6D5FFB2] px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
                 />
               </div>
@@ -125,17 +203,29 @@ export default function Purchase() {
           </div>
         </div>
       </form>
-      <div className="mt-2">
-        <Table headings={headings} data={selectedProducts} />
-      </div>
-      <div className="mt-6 flex items-center justify-end gap-x-6">
-        <button
-          type="button"
-          className="rounded-xl px-12 py-2 text-lg font-semibold text-white shadow-xs focus-visible:outline-2 focus-visible:outline-offset-2 bg-[#4ADC15B2]"
-        >
-          Create Purchase
-        </button>
-      </div>
+      {selectedProducts?.length > 0 && (
+        <>
+          <div className="mt-2">
+            <Table2
+              headings={headings}
+              data={selectedProducts}
+              datakeys={inventoryResponseKeys}
+              onChangeQuantity={(e) => {
+                updateProductQuantity(e.target.id, e.target.value);
+              }}
+            />
+          </div>
+          <div className="mt-6 flex items-center justify-end gap-x-6">
+            <button
+              type="button"
+              className="rounded-xl px-12 py-2 text-lg font-semibold text-white shadow-xs focus-visible:outline-2 focus-visible:outline-offset-2 bg-[#4ADC15B2]"
+              onClick={submitHandler}
+            >
+              Create Purchase
+            </button>
+          </div>
+        </>
+      )}
     </div>
   );
 }

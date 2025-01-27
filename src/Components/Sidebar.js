@@ -17,16 +17,16 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
       } transition-transform duration-300`}
       style={{ width: "250px" }}
     >
+      <div className="text-center py-4 text-2xl font-bold border-b border-gray-700">
+        Company Name
+      </div>
       {/* Close Button */}
       <button
-        className="absolute top-4 right-4 text-white text-2xl focus:outline-none"
+        className="absolute top-4 right-1 text-white text-xl focus:outline-none"
         onClick={toggleSidebar}
       >
         ✖
       </button>
-      <div className="text-center py-4 text-2xl font-bold border-b border-gray-700">
-        Business MS
-      </div>
       <nav className="flex flex-col gap-2 p-4">
         {menuItems.map((item) => (
           <NavLink
