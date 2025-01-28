@@ -15,7 +15,9 @@ const initialData = {
   sellingPrice: "",
   stock: "",
   weight: "",
+  unit: "",
 };
+const units = ["gm", "kg", "ml", "li"];
 const baseurl = process.env.REACT_APP_BASE_URL;
 export default function AddProduct() {
   const [formData, handleChange, resetForm] = UseFormData(initialData);
@@ -102,23 +104,30 @@ export default function AddProduct() {
           onChange={handleChange}
         />
         <InputBox
-          label={"Supplier's Name"}
-          name="supplier"
-          value={formData.supplier}
+          label={"Weight (gms)"}
+          name="weight"
+          value={formData.weight}
           onChange={handleChange}
+          type={"number"}
         />
-        <InputBox
-          label={"HSN"}
-          name="hsn"
-          value={formData.hsn}
-          onChange={handleChange}
-        />
-        <InputBox
-          label={"Unique ID of Product"}
-          name="uniqueId"
-          value={formData.uniqueId}
-          onChange={handleChange}
-        />
+        <div className="col-span-2">
+          <label className="block text-lg font-medium text-white">Unit</label>
+          <select
+            name="unit"
+            value={formData.unit}
+            onChange={handleChange}
+            className="block w-full rounded-md px-3 py-1.5 bg-[#B6D5FFB2] text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
+          >
+            <option value="">select</option>
+            {units?.map((item, i) => {
+              return (
+                <option key={i} value={item}>
+                  {item}
+                </option>
+              );
+            })}
+          </select>
+        </div>
         <InputBox
           label={"Max Retail Price"}
           name="mrp"
@@ -134,6 +143,18 @@ export default function AddProduct() {
           type={"number"}
         />
         <InputBox
+          label={"Supplier's Name"}
+          name="supplier"
+          value={formData.supplier}
+          onChange={handleChange}
+        />
+        <InputBox
+          label={"HSN"}
+          name="hsn"
+          value={formData.hsn}
+          onChange={handleChange}
+        />
+        <InputBox
           label={"Stock"}
           name="stock"
           value={formData.stock}
@@ -141,19 +162,17 @@ export default function AddProduct() {
           type={"number"}
         />
         <InputBox
-          label={"Weight (gms)"}
-          name="weight"
-          value={formData.weight}
+          label={"Unique ID of Product"}
+          name="uniqueId"
+          value={formData.uniqueId}
           onChange={handleChange}
-          type={"number"}
         />
-        <div className="col-span-1"></div>
-        <div className="mt-6 flex items-center gap-x-6 col-span-1">
+        <div className="flex items-center col-span-2">
           <button
             type="submit"
-            className="rounded-xl px-12 py-2 text-lg font-semibold text-white shadow-xs focus-visible:outline-2 focus-visible:outline-offset-2 bg-[#4ADC15B2]"
+            className="rounded-xl px-8 py-2 text-lg font-semibold text-white shadow-xs focus-visible:outline-2 focus-visible:outline-offset-2 bg-[#4ADC15B2]"
           >
-            Add Product
+            Add New Product
           </button>
         </div>
       </form>

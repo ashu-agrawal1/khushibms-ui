@@ -33,13 +33,13 @@ const GSTInvoice = ({ data, products }) => {
           GST / TAX INVOICE
         </h1>
         <h1 className="text-2xl font-bold text-center leading-none">
-          KAMLA MARKETING (EVEREST)
+          Muskan Agency
         </h1>
         <p className="text-center leading-none">
-          162 A AWADHPURI COLONY, Narmada Road - Jabalpur(M.P.) 482002
+          Samdariya Colony,Mukharjee Chowk,Manegaon,Ranjhi Jabalpur(M.P.) 482002
         </p>
         <p className="text-center">
-          Phone - 9131885800, WHATSAPP - 9752443000 Email:-
+          Phone - 8839316092, WHATSAPP - 9752443000 Email:-
           KAMLAKT3611@gmail.com
         </p>
         <p className="text-center font-bold">
@@ -131,7 +131,7 @@ const GSTInvoice = ({ data, products }) => {
       <div className="border-x-2 border-b-2 p-2">
         <span className="font-bold underline">Terms and Conditions</span>
         <span className="mx-4">E.& O. E.</span>
-        <span className="font-bold mx-4">GST - 23AFGPB3623R1ZG</span>
+        <span className="font-bold mx-4">GST - 23AGXPY3962G1ZN</span>
         <span className="font-bold ml-6">For KAMLA MARKETING</span>
         <br />
         <span className="mr-2">

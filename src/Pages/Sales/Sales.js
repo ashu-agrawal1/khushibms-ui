@@ -146,7 +146,7 @@ export default function Sales() {
               onChange={handleChange}
             />
             <InputBox
-              label={"Party GST"}
+              label={"Party GST No."}
               name="gst"
               value={formData.gst}
               onChange={handleChange}

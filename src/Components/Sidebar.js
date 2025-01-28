@@ -4,7 +4,7 @@ import { NavLink } from "react-router-dom";
 const Sidebar = ({ isOpen, toggleSidebar }) => {
   const menuItems = [
     { name: "Tax Master", path: "/master/tax" },
-    { name: "Products", path: "/products/addproduct" },
+    { name: "Add Product", path: "/products/addproduct" },
     { name: "Sales", path: "/sales/sales" },
     { name: "Inventory", path: "/inventory" },
     { name: "Purchase", path: "/purchase/purchase" },
@@ -18,7 +18,7 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
       style={{ width: "250px" }}
     >
       <div className="text-center py-4 text-2xl font-bold border-b border-gray-700">
-        Company Name
+        Muskan Agency
       </div>
       {/* Close Button */}
       <button

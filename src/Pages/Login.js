@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { toast } from "react-toastify";
 const baseurl = process.env.REACT_APP_BASE_URL;
-export default function Login() {
+export default function Login({ setIsAuthenticated }) {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
@@ -17,30 +17,20 @@ export default function Login() {
         data: { username, password },
       });
       toast.success("Logged In");
-      navigate("inventory");
+      setIsAuthenticated(true); // this is redirecting to inventory page from app,js file
+      // navigate("inventory");
     } catch (err) {
       console.log(err);
-      toast.error(err?.response?.data?.errors?.[0]?.msg || err?.response?.data || "");
-    }
-  };
-  const handleLogout = async (e) => {
-    e.preventDefault();
-    try {
-      // Make an API call to authenticate the user
-      await axios({
-        method: "get",
-        url: baseurl + "logout",
-        // data: { username, password },
-      });
-    } catch (err) {
-      console.log(err);
+      toast.error(
+        err?.response?.data?.errors?.[0]?.msg || err?.response?.data || ""
+      );
     }
   };
 
   return (
     <div className="flex items-center justify-center h-screen">
-        <div className="p-8 rounded-3xl shadow-md w-96 bg-[#B6D5FFB2]">
-        <h2 className="text-5xl font-semibold text-center mb-6 text-[#FFFFFF]">
+      <div className="p-8 rounded-3xl shadow-md w-96 bg-[#B6D5FFB2]">
+        <h2 className="text-4xl font-semibold text-center mb-8 text-[#FFFFFF]">
           Login
         </h2>
         <form onSubmit={handleLogin} className="flex flex-col">
@@ -48,7 +38,6 @@ export default function Login() {
             Username
           </label>
           <input
-            // type="email"
             placeholder="Username"
             value={username}
             onChange={(e) => setUsername(e.target.value)}
@@ -72,13 +61,6 @@ export default function Login() {
           </button>
         </form>
       </div>
-      {/* <button
-        type="button"
-        className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
-        onClick={handleLogout}
-      >
-        LogOut
-      </button> */}
     </div>
   );
 }

@@ -137,7 +137,7 @@ export default function Purchase() {
                 htmlFor="last-name"
                 className="block text-lg font-medium text-white"
               >
-                Supplier GST
+                Supplier GST No.
               </label>
               <input
                 type="text"

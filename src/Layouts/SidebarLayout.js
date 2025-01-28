@@ -16,6 +16,9 @@ const SidebarLayout = ({ children }) => {
       <div className="flex-1 flex flex-col">
         <Navbar toggleSidebar={toggleSidebar} />
         <div className="flex-1 h-full p-4 overflow-auto bg-gradient-to-b from-[#29004E] to-[#5F00B4]">
+          <div className="watermark">
+            <img src="/logo.svg" alt="Watermark" />
+          </div>
           {children}
         </div>
       </div>
