@@ -14,6 +14,9 @@ export default function UseFormData(initialData) {
       [event.target.name]: event.target.value,
     });
   };
+  const resetForm = () => {
+    setFormData(initialData);
+  };
 
-  return [formData, handleChange];
+  return [formData, handleChange, resetForm];
 }

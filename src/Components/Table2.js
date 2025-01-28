@@ -1,7 +1,7 @@
 import React from "react";
 import InputBox from "./InputBox";
 
-export default function Table2({ headings, data, datakeys, onChangeQuantity }) {
+export default function Table2({ headings, data, datakeys, onChangeQuantity, onDeleteHandler }) {
   return (
     <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
       <table className="w-full text-sm text-left rtl:text-right text-white text-semibold dark:text-gray-400">
@@ -27,7 +27,6 @@ export default function Table2({ headings, data, datakeys, onChangeQuantity }) {
                   if (datakey == "quantity") {
                     return (
                       <td className="px-6 py-4" key={j}>
-                        {/* <input type="number" value={row[datakey]} /> */}
                         <InputBox
                           type="number"
                           value={row[datakey]}
@@ -35,6 +34,19 @@ export default function Table2({ headings, data, datakeys, onChangeQuantity }) {
                           id={row?._id || ""}
                           min={"0"}
                         />
+                      </td>
+                    );
+                  }
+                  if (datakey == "action") {
+                    return (
+                      <td className="px-6 py-4" key={j}>
+                        <button
+                          type="button"
+                          className="rounded-xl px-6 py-2 text-lg font-semibold text-white shadow-xs focus-visible:outline-2 focus-visible:outline-offset-2 bg-gradient-to-r from-[#0A7CE7EC] to-[#014BC8]"
+                          onClick={()=>onDeleteHandler(row._id)}
+                        >
+                          Delete
+                        </button>
                       </td>
                     );
                   }

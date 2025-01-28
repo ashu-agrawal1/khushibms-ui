@@ -18,7 +18,7 @@ const initialData = {
 };
 const baseurl = process.env.REACT_APP_BASE_URL;
 export default function AddProduct() {
-  const [formData, handleChange] = UseFormData(initialData);
+  const [formData, handleChange, resetForm] = UseFormData(initialData);
   const [tax, setTax] = useState([]);
   const getTax = () => {
     axios({
@@ -44,7 +44,7 @@ export default function AddProduct() {
     })
       .then((response) => {
         console.log(response);
-
+        resetForm();
         toast.success("Product Added");
       })
       .catch((err) => {

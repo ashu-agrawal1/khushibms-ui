@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import Table2 from "../../Components/Table2";
 import axios from "axios";
 import { toast } from "react-toastify";
+import SearchableDropdown from "../../Components/SearchableDropdown";
 
 const baseurl = process.env.REACT_APP_BASE_URL;
 const inventoryResponseKeys = [
@@ -11,6 +12,7 @@ const inventoryResponseKeys = [
   "mrp",
   "hsn",
   "quantity",
+  "action",
 ];
 const headings = [
   "Product Name",
@@ -19,6 +21,7 @@ const headings = [
   "MRP",
   "HSN",
   "Quantity",
+  "Action",
 ];
 
 export default function Purchase() {
@@ -61,6 +64,10 @@ export default function Purchase() {
       }
       return item;
     });
+    setSelectedProducts(newProducts);
+  };
+  const deleteProductHandler = (id) => {
+    const newProducts = selectedProducts?.filter((item) => item._id != id);
     setSelectedProducts(newProducts);
   };
   const getStock = () => {
@@ -120,12 +127,10 @@ export default function Purchase() {
               <label className="block text-lg font-medium text-white">
                 Supplier's Name
               </label>
-              <div className="mt-2">
-                <input
-                  type="text"
-                  className="block w-full rounded-md px-3 py-1.5 bg-[#B6D5FFB2] text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
-                />
-              </div>
+              <input
+                type="text"
+                className="block w-full rounded-md px-3 py-1.5 bg-[#B6D5FFB2] text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
+              />
             </div>
             <div className="col-span-2">
               <label
@@ -134,12 +139,10 @@ export default function Purchase() {
               >
                 Supplier GST
               </label>
-              <div className="mt-2">
-                <input
-                  type="text"
-                  className="block w-full rounded-md bg-[#B6D5FFB2] px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
-                />
-              </div>
+              <input
+                type="text"
+                className="block w-full rounded-md bg-[#B6D5FFB2] px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
+              />
             </div>
             <div className="col-span-2">
               <label
@@ -148,50 +151,30 @@ export default function Purchase() {
               >
                 Date
               </label>
-              <div className="mt-2">
-                <input
-                  type="date"
-                  className="block w-full rounded-md bg-[#B6D5FFB2] px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
-                />
-              </div>
+              <input
+                type="date"
+                className="block w-full rounded-md bg-[#B6D5FFB2] px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
+              />
             </div>
-            <div className="col-span-2">
-              <label className="block text-lg font-medium text-white">
-                Product
-              </label>
-              <select
-                name="product"
-                value={currProduct}
-                onChange={(event) => {
-                  setCurrProduct(event.target.value);
-                }}
-                className="block w-full mt-2 rounded-md px-3 py-1.5 bg-[#B6D5FFB2] text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
-              >
-                <option value="">select</option>
-                {products?.map((item, i) => {
-                  return (
-                    <option key={i} value={item?._id}>
-                      {item?.name}
-                    </option>
-                  );
-                })}
-              </select>
-            </div>
+            <SearchableDropdown
+              products={products}
+              currProduct={currProduct}
+              setCurrProduct={setCurrProduct}
+              label={"Product"}
+            />
             <div className="col-span-2">
               <label className="block text-lg font-medium text-white">
                 Quantity
               </label>
-              <div className="mt-2">
-                <input
-                  type="number"
-                  value={quantity}
-                  onChange={(e) => setQuantity(e.target.value)}
-                  min={1}
-                  className="block w-full rounded-md bg-[#B6D5FFB2] px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
-                />
-              </div>
+              <input
+                type="number"
+                value={quantity}
+                onChange={(e) => setQuantity(e.target.value)}
+                min={1}
+                className="block w-full rounded-md bg-[#B6D5FFB2] px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
+              />
             </div>
-            <div className="col-span-2">
+            <div className="col-span-2 flex items-end">
               <button
                 type="button"
                 className="rounded-xl px-6 py-2 text-lg font-semibold text-white shadow-xs focus-visible:outline-2 focus-visible:outline-offset-2 bg-[#4ADC15B2]"
@@ -213,6 +196,7 @@ export default function Purchase() {
               onChangeQuantity={(e) => {
                 updateProductQuantity(e.target.id, e.target.value);
               }}
+              onDeleteHandler={(id) => deleteProductHandler(id)}
             />
           </div>
           <div className="mt-6 flex items-center justify-end gap-x-6">
