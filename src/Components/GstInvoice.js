@@ -1,31 +1,6 @@
-const GSTInvoice = ({ data, products }) => {
-  console.log("products:::::", products);
-  //   const calculateTotals = () => {
-  //     const totals = {
-  //       taxableValue: 0,
-  //       totalCGST: 0,
-  //       totalSGST: 0,
-  //       totalIGST: 0,
-  //       totalAmount: 0,
-  //     };
+import { toDDMMYYYY } from "../Utils.js/Dates";
 
-  //     products.forEach((product) => {
-  //       const taxableValue = product.price * product.quantity;
-  //       const gstAmount = (taxableValue * product.gstRate) / 100;
-  //       const cgst = gstAmount / 2;
-  //       const sgst = gstAmount / 2;
-
-  //       totals.taxableValue += taxableValue;
-  //       totals.totalCGST += cgst;
-  //       totals.totalSGST += sgst;
-  //       totals.totalAmount += taxableValue + gstAmount;
-  //     });
-
-  //     return totals;
-  //   };
-
-  //   const totals = calculateTotals();
-
+const GSTInvoice = ({ data, products, total }) => {
   return (
     <div className="bg-gray-100 min-h-screen">
       <div className="border-2">
@@ -56,7 +31,7 @@ const GSTInvoice = ({ data, products }) => {
         </div>
         <div className="col-span-3 px-2">
           <p className="font-bold">Invoice No : {data?.invoiceNo}</p>
-          <p className="">Dated : {data?.date}</p>
+          <p className="">Dated : {toDDMMYYYY(data?.date)}</p>
           <p className="">Party Tel.:-</p>
         </div>
       </div>
@@ -84,11 +59,6 @@ const GSTInvoice = ({ data, products }) => {
           </thead>
           <tbody className="text-sm font-medium">
             {products?.map((product, i) => {
-              const taxableValue = product.price * product.quantity;
-              const gstAmount = (taxableValue * product.gstRate) / 100;
-              const cgst = gstAmount / 2;
-              const sgst = gstAmount / 2;
-
               return (
                 <tr key={product._id} className="text-right">
                   <td className="border-x border-gray-300 px-2">{i + 1}.</td>
@@ -108,16 +78,16 @@ const GSTInvoice = ({ data, products }) => {
                     {product.sellingPrice.toFixed(2)}
                   </td>
                   <td className="border-x border-gray-300 px-1">
-                    {product.gstRate}
+                    {product.taxPercentage}
                   </td>
                   <td className="border-x border-gray-300 px-1">
-                    {cgst.toFixed(2)}
+                    {product.cgst.toFixed(2)}
                   </td>
                   <td className="border-x border-gray-300 px-1">
-                    {sgst.toFixed(2)}
+                    {product.sgst.toFixed(2)}
                   </td>
                   <td className="border-x border-gray-300 px-1">
-                    {(taxableValue + gstAmount).toFixed(2)}
+                    {product.amount.toFixed(2)}
                   </td>
                 </tr>
               );
@@ -126,7 +96,7 @@ const GSTInvoice = ({ data, products }) => {
         </table>
       </div>
       <div className="font-bold text-right border-2 py-2">
-        Totals c/o <span className="mx-2 ml-4">₹ 4,188.00</span>
+        Totals c/o <span className="mx-2 ml-4">₹ {total.toFixed(2)}</span>
       </div>
       <div className="border-x-2 border-b-2 p-2">
         <span className="font-bold underline">Terms and Conditions</span>

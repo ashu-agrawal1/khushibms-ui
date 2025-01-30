@@ -3,6 +3,8 @@ import axios from "axios";
 import { toast } from "react-toastify";
 import UseFormData from "../../Custom Hooks/UseFormData";
 import InputBox from "../../Components/InputBox";
+import { useSearchParams } from "react-router-dom";
+
 const initialData = {
   name: "",
   brandName: "",
@@ -19,9 +21,13 @@ const initialData = {
 };
 const units = ["gm", "kg", "ml", "li"];
 const baseurl = process.env.REACT_APP_BASE_URL;
-export default function AddProduct() {
-  const [formData, handleChange, resetForm] = UseFormData(initialData);
+export default function EditProduct() {
+  const [formData, handleChange, resetForm, changeAllData] =
+    UseFormData(initialData);
+  const [searchParams] = useSearchParams();
+  const id = searchParams.get("id");
   const [tax, setTax] = useState([]);
+
   const getTax = () => {
     axios({
       method: "get",
@@ -35,19 +41,32 @@ export default function AddProduct() {
         toast.error(err?.response?.data || "");
       });
   };
+  const getProductById = (id) => {
+    axios({
+      method: "get",
+      url: baseurl + "products/" + id,
+    })
+      .then((res) => {
+        changeAllData({ ...res.data, taxId: res.data.tax_id });
+      })
+      .catch((err) => {
+        console.log(err);
+        toast.error(err?.response?.data || "");
+      });
+  };
 
-  const addProductHandler = (e) => {
+  const submitHandler = (e) => {
     e.preventDefault();
     console.log(formData);
     axios({
-      method: "post",
+      method: "put",
       url: baseurl + "products",
-      data: formData,
+      data: { ...formData, id: id },
     })
       .then((response) => {
         console.log(response);
-        resetForm();
-        toast.success("Product Added");
+        // resetForm();
+        toast.success("Product Edited");
       })
       .catch((err) => {
         console.log(err);
@@ -58,12 +77,13 @@ export default function AddProduct() {
   };
   useEffect(() => {
     getTax();
+    if (id) getProductById(id);
   }, []);
   return (
     <div>
       <form
         className="mt-10 grid grid-cols-4 gap-x-6 gap-y-4"
-        onSubmit={addProductHandler}
+        onSubmit={submitHandler}
       >
         <InputBox
           label={"Product Name"}
@@ -172,7 +192,7 @@ export default function AddProduct() {
             type="submit"
             className="rounded-xl px-8 py-2 text-lg font-semibold text-white shadow-xs focus-visible:outline-2 focus-visible:outline-offset-2 bg-[#4ADC15B2]"
           >
-            Add New Product
+            Edit Product
           </button>
         </div>
       </form>

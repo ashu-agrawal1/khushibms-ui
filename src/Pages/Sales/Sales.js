@@ -6,6 +6,7 @@ import InputBox from "../../Components/InputBox";
 import Table2 from "../../Components/Table2";
 import SearchableDropdown from "../../Components/SearchableDropdown";
 import GSTInvoice from "../../Components/GstInvoice";
+import { roundOffTo2Places } from "../../Utils.js/Numbers";
 const baseurl = process.env.REACT_APP_BASE_URL;
 const inventoryResponseKeys = [
   "name",
@@ -15,6 +16,7 @@ const inventoryResponseKeys = [
   "sellingPrice",
   "hsn",
   "quantity",
+  "amount",
   "action",
 ];
 const headings = [
@@ -25,6 +27,7 @@ const headings = [
   "rate",
   "HSN",
   "Quantity",
+  "Amount",
   "Action",
 ];
 const initialData = {
@@ -40,8 +43,30 @@ export default function Sales() {
   const [selectedProducts, setSelectedProducts] = useState([]);
   const [currProduct, setCurrProduct] = useState("");
   const [quantity, setQuantity] = useState("1");
+  const [total, setTotal] = useState(0);
   const [formData, handleChange, resetForm] = UseFormData(initialData);
 
+  const calculateTotal = (products) => {
+    // returning products with total
+    let total = 0;
+    const productsWithTotal = products?.map((product) => {
+      const sgst = roundOffTo2Places(
+        (product?.sellingPrice * product.taxPercentage * product.quantity) / 200
+      );
+      const amount = roundOffTo2Places(
+        product.sellingPrice * product.quantity + sgst * 2
+      );
+      total = total + amount;
+      return {
+        ...product,
+        cgst: sgst,
+        sgst,
+        amount,
+      };
+    });
+    setTotal(total);
+    return productsWithTotal;
+  };
   const addProductHandler = () => {
     if (!currProduct) {
       toast.error("Please select Product");
@@ -61,7 +86,9 @@ export default function Sales() {
       return;
     }
     const newProduct = products?.find((ele) => ele._id === currProduct);
-    setSelectedProducts((prev) => [...prev, { ...newProduct, quantity }]);
+    setSelectedProducts((prev) =>
+      calculateTotal([...prev, { ...newProduct, quantity }])
+    );
     setQuantity("1");
     setCurrProduct("");
   };
@@ -70,17 +97,21 @@ export default function Sales() {
       // toast.error("Please Enter valid quantity");
       return;
     }
-    const newProducts = selectedProducts?.map((item) => {
-      if (item._id === id) {
-        return { ...item, quantity: newQuantity };
-      }
-      return item;
+    setSelectedProducts((prev) => {
+      const newProducts = prev?.map((item) => {
+        if (item._id === id) {
+          return { ...item, quantity: newQuantity };
+        }
+        return item;
+      });
+      return calculateTotal([...newProducts]);
     });
-    setSelectedProducts(newProducts);
   };
   const deleteProductHandler = (id) => {
-    const newProducts = selectedProducts?.filter((item) => item._id != id);
-    setSelectedProducts(newProducts);
+    setSelectedProducts((prev) => {
+      const newProducts = prev?.filter((item) => item._id != id);
+      return calculateTotal([...newProducts]);
+    });
   };
   const getStock = () => {
     axios({
@@ -205,6 +236,16 @@ export default function Sales() {
               onDeleteHandler={(id) => deleteProductHandler(id)}
             />
           </div>
+          <div className="flex justify-end">
+            <button
+              type="button"
+              disabled
+              className="rounded-sm pr-6 pl-4 py-2 text-xl font-semibold text-white"
+              onClick={submitHandler}
+            >
+              Total : {total.toFixed(2)}
+            </button>
+          </div>
           <div className="mt-6 flex items-center justify-end gap-x-6">
             <button
               type="button"
@@ -217,7 +258,11 @@ export default function Sales() {
         </>
       )}
       <div className="hidden print:block print:visible absolute left-0 top-0">
-        <GSTInvoice data={formDataCopy} products={selectedProductsCopy} />
+        <GSTInvoice
+          data={formDataCopy}
+          products={selectedProductsCopy}
+          total={total}
+        />
       </div>
     </div>
   );

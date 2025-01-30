@@ -12,6 +12,7 @@ const Navbar = ({ toggleSidebar }) => {
   const pageHeadings = {
     "/master/tax": "Tax Master",
     "/products/addproduct": "Add New Product",
+    "/products/editproduct": "Edit Product",
     "/sales/sales": "Sales",
     "/inventory": "Inventory",
     "/purchase/purchase": "Purchase",

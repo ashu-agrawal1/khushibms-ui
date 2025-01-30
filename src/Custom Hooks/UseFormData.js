@@ -14,9 +14,14 @@ export default function UseFormData(initialData) {
       [event.target.name]: event.target.value,
     });
   };
+  const changeAllData = (data) => {
+    setFormData({
+      ...data,
+    });
+  };
   const resetForm = () => {
     setFormData(initialData);
   };
 
-  return [formData, handleChange, resetForm];
+  return [formData, handleChange, resetForm, changeAllData];
 }

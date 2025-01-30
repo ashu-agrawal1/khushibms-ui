@@ -16,6 +16,7 @@ import Sales from "./Pages/Sales/Sales";
 import Purchase from "./Pages/Purchase/Purchase";
 import { useEffect, useState } from "react";
 import axios from "axios";
+import EditProduct from "./Pages/Products/EditProduct";
 
 const baseurl = process.env.REACT_APP_BASE_URL;
 export default function App() {
@@ -100,6 +101,7 @@ export default function App() {
           }
         >
           <Route path="addproduct" element={<AddProduct />} />
+          <Route path="editproduct" element={<EditProduct />} />
         </Route>
         <Route
           path="/sales"
