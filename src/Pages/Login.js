@@ -31,7 +31,7 @@ export default function Login({ setIsAuthenticated }) {
     <div className="flex items-center justify-center h-screen">
       <div className="p-8 rounded-3xl shadow-md w-96 bg-[#B6D5FFB2]">
         <h2 className="text-4xl font-semibold text-center mb-8 text-[#FFFFFF]">
-          Login test
+          Login
         </h2>
         <form onSubmit={handleLogin} className="flex flex-col">
           <label className="block text-sm/6 font-medium text-[#FFFFFF] mb-1">
