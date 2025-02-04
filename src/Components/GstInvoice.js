@@ -14,14 +14,14 @@ const GSTInvoice = ({ data, products, total }) => {
           Samdariya Colony,Mukharjee Chowk,Manegaon,Ranjhi Jabalpur(M.P.) 482002
         </p>
         <p className="text-center">
-          Phone - 8839316092, WHATSAPP - 9752443000 Email:-
-          KAMLAKT3611@gmail.com
+          Phone - 8839316092, WHATSAPP - 8839316092 Email:-
+          Lovekeshyadav82@gmail.com
         </p>
         <p className="text-center font-bold">
-          D.L: 20B/3392/47/2021 D.L: 21B/3393/47/2021 FSSAI No : 11420170000038
+          FSSAI No : 
         </p>
         <p className="text-center font-bold leading-none mb-2">
-          Authorised Distributors of FORTUNE, RECKITT & COLGATE PAMOLIVE
+          Authorised Distributors of SHAGUN, RAMBANDHU & MOHINI
         </p>
       </div>
       <div className="grid grid-cols-8 border-x-2">
@@ -46,7 +46,7 @@ const GSTInvoice = ({ data, products, total }) => {
           <thead>
             <tr className="bg-gray-200">
               <th className="border border-gray-300 px-2 py-2 w-2">S.N.</th>
-              <th className="border border-gray-300 px-1 py-2">Description</th>
+              <th className="border border-gray-300 px-1 py-2">Product Name</th>
               <th className="border border-gray-300 px-1 py-2">HSN</th>
               <th className="border border-gray-300 px-1 py-2">MRP</th>
               <th className="border border-gray-300 px-1 py-2">Qty</th>
@@ -102,7 +102,7 @@ const GSTInvoice = ({ data, products, total }) => {
         <span className="font-bold underline">Terms and Conditions</span>
         <span className="mx-4">E.& O. E.</span>
         <span className="font-bold mx-4">GST - 23AGXPY3962G1ZN</span>
-        <span className="font-bold ml-6">For KAMLA MARKETING</span>
+        {/* <span className="font-bold ml-6">For KAMLA MARKETING</span> */}
         <br />
         <span className="mr-2">
           1. Goods once sold would not be taken back.
