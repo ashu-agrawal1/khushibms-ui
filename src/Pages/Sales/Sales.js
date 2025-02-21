@@ -33,6 +33,7 @@ const headings = [
 const initialData = {
   partyName: "",
   gst: "",
+  address: "",
   date: "",
   invoiceNo: "",
 };
@@ -183,6 +184,12 @@ export default function Sales() {
               onChange={handleChange}
             />
             <InputBox
+              label={"Party Address"}
+              name="address"
+              value={formData.address}
+              onChange={handleChange}
+            />
+            <InputBox
               label={"Date"}
               name="date"
               value={formData.date}
@@ -196,7 +203,7 @@ export default function Sales() {
               onChange={handleChange}
             />
             <div className="col-span-2"></div>
-            <div className="col-span-2"></div>
+            {/* <div className="col-span-2"></div> */}
             <SearchableDropdown
               products={products}
               currProduct={currProduct}

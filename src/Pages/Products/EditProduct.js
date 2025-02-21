@@ -15,6 +15,7 @@ const initialData = {
   uniqueId: "",
   mrp: "",
   sellingPrice: "",
+  purchasePrice: "",
   stock: "",
   weight: "",
   unit: "",
@@ -163,6 +164,13 @@ export default function EditProduct() {
           type={"number"}
         />
         <InputBox
+          label={"Purchase Price"}
+          name="purchasePrice"
+          value={formData.purchasePrice}
+          onChange={handleChange}
+          type={"number"}
+        />
+        <InputBox
           label={"Supplier's Name"}
           name="supplier"
           value={formData.supplier}
@@ -187,10 +195,10 @@ export default function EditProduct() {
           value={formData.uniqueId}
           onChange={handleChange}
         />
-        <div className="flex items-center col-span-2">
+        <div className="flex justify-end col-span-2">
           <button
             type="submit"
-            className="rounded-xl px-8 py-2 text-lg font-semibold text-white shadow-xs focus-visible:outline-2 focus-visible:outline-offset-2 bg-[#4ADC15B2]"
+            className="rounded-xl px-8 py-2 mt-4 text-lg font-semibold text-white shadow-xs focus-visible:outline-2 focus-visible:outline-offset-2 bg-[#4ADC15B2]"
           >
             Edit Product
           </button>

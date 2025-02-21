@@ -1,6 +1,8 @@
 import { toDDMMYYYY } from "../Utils.js/Dates";
 
 const GSTInvoice = ({ data, products, total }) => {
+  const totalRows = 10;
+  const emptyRows = totalRows - products?.length;
   return (
     <div className="bg-gray-100 min-h-screen">
       <div className="border-2">
@@ -17,9 +19,7 @@ const GSTInvoice = ({ data, products, total }) => {
           Phone - 8839316092, WHATSAPP - 8839316092 Email:-
           Lovekeshyadav82@gmail.com
         </p>
-        <p className="text-center font-bold">
-          FSSAI No : 
-        </p>
+        <p className="text-center font-bold">FSSAI No : 21425170000626</p>
         <p className="text-center font-bold leading-none mb-2">
           Authorised Distributors of SHAGUN, RAMBANDHU & MOHINI
         </p>
@@ -28,6 +28,7 @@ const GSTInvoice = ({ data, products, total }) => {
         <div className="col-span-5 border-r-2 px-2">
           <p className="font-bold">Party Details : {data?.partyName}</p>
           <p className="font-bold">Party GST:- {data?.gst}</p>
+          <p className="font-bold">Address:- {data?.address}</p>
         </div>
         <div className="col-span-3 px-2">
           <p className="font-bold">Invoice No : {data?.invoiceNo}</p>
@@ -92,6 +93,21 @@ const GSTInvoice = ({ data, products, total }) => {
                 </tr>
               );
             })}
+            {/* Add Empty Rows to Maintain Layout */}
+            {/* {Array.from({ length: emptyRows }).map((_, index) => (
+              <tr key={`empty-${index}`} className="text-right h-8">
+                <td className="border-x border-gray-300 px-2"></td>
+                <td className="border-x border-gray-300 px-1 text-left"></td>
+                <td className="border-x border-gray-300 px-1"></td>
+                <td className="border-x border-gray-300 px-1"></td>
+                <td className="border-x border-gray-300 px-1"></td>
+                <td className="border-x border-gray-300 px-1"></td>
+                <td className="border-x border-gray-300 px-1"></td>
+                <td className="border-x border-gray-300 px-1"></td>
+                <td className="border-x border-gray-300 px-1"></td>
+                <td className="border-x border-gray-300 px-1"></td>
+              </tr>
+            ))} */}
           </tbody>
         </table>
       </div>
